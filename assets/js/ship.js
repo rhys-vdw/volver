@@ -1,27 +1,23 @@
 function createEntity(image, x, y) {
-  var sprite = new jaws.Sprite({image: image, x:x, y:y, context:context});
-  sprite.anchor("center");
+  var sprite = new jaws.Sprite({image: image, x:x, y:y, context:context, anchor:"center"});
 
   return sprite;
 }
 
 function createShadow(sprite) {
-  //var color = "#887e63";
   var shadow = sprite.asCanvas();
   var ctx = shadow.getContext('2d');
   console.dir(shadow);
   var pixels = ctx.getImageData(0, 0, 32, 32);
   var d = pixels.data;
-  var count = 0;
   for (var i = 0; i < d.length; i += 4) {
     // change all opaque pixels to shadow
     d[i] = 136;
     d[i + 1] = 126;
     d[i + 2] = 99;
   }
-  console.log(count + " pixels altered!");
   ctx.putImageData(pixels, 0, 0);
-  return new jaws.Sprite({image: shadow});
+  return new jaws.Sprite({image: shadow, anchor:"center"});
 }
 
 function createShip(image, x, y, health, colliderSize) {
@@ -31,8 +27,6 @@ function createShip(image, x, y, health, colliderSize) {
 
   var guns = new Array();
   var gunIndex = 0;
-
-  var flyHeight = 40;
 
   ship.shadow = createShadow(ship);
 
@@ -127,8 +121,8 @@ function createEnemyShip(image, x, y, health, speed, colliderSize) {
     this.getGun().createGem();
   }
 
-  ship.rotateTo(180);
   ship.shadow.rotateTo(180);
+  ship.rotateTo(180);
 
   return ship;
 }

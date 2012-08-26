@@ -12,6 +12,9 @@ var vAxis = 0;
 var keyDrop = 2.0;
 var keyRise = 5.0;
 
+var flyHeight = 24;
+var ShadowColor = "#887e63";
+
 var FPS = 30;
 var DeltaTime = 1 / FPS;
 
@@ -40,11 +43,23 @@ var Ranges = {
   blue: Range(0, 1),
 };
 
-function hexColor(r, g, b) {
+function hexColor() {
+  var result = "#";
+  for (var i = 0; i < 3; i++) {
+    var s = (Math.round(arguments[i] * 255)).toString(16);
+    if (s.length == 1) result += "0";
+    result += s;
+    console.log(arguments[i] + " -> " + s);
+  }
+  console.log("final string = " + s);
+  return result;
+
+  /*
   return "#" +
     (Math.round(r * 255)).toString(16) +
     (Math.round(g * 255)).toString(16) +
     (Math.round(b * 255)).toString(16);
+    */
 }
 
 function setup() {
@@ -62,8 +77,6 @@ function setup() {
 };
 
 function update() {
-  // check if spawning enemy
-  enemySpawner.update();
 
   if (gameOver == false) {
     var x = 0, y = 0;
@@ -83,12 +96,14 @@ function update() {
 
     player.setFiring(jaws.pressed("z"));
     player.update();
-    bullets.forEach(function(b) { b.update() });
-    enemyBullets.forEach(function(b) { b.update() });
-    enemies.forEach(function(b) { b.update() });
-    gems.forEach(function(b) { b.update() });
-    level.update();
   }
+
+  level.update();
+  enemySpawner.update();
+  bullets.forEach(function(b) { b.update() });
+  enemyBullets.forEach(function(b) { b.update() });
+  enemies.forEach(function(b) { b.update() });
+  gems.forEach(function(b) { b.update() });
 
   checkCollisions();
   cullDeadObjects();
@@ -130,7 +145,7 @@ function checkCollisions() {
 
 function cullDeadObjects() {
   enemies.deleteIf(function(e) {
-    if (e.health <= 0) {
+    if (e.y > jaws.height + 32 || e.health <= 0) {
       e.destroy();
       return true;
     }
@@ -138,23 +153,31 @@ function cullDeadObjects() {
   });
 
   bullets.deleteIf(function(b) {
-    return b.shouldDestroy;
+    return b.shouldDestroy || b.y < -32;
   });
 
   enemyBullets.deleteIf(function(b) {
-    return b.shouldDestroy;
+    return b.shouldDestroy || b.y > jaws.height + 32;
   });
 
   gems.deleteIf(function(b) {
-    return b.shouldDestroy;
+    return b.shouldDestroy || isOutsideCanvas(b);
   });
+};
+
+function isOutsideCanvas(item) {
+  return (item.x < 0 || item.y < 0 || item.x > jaws.width || item.y > jaws.height);
 };
 
 function draw() {
   jaws.clear();
   level.draw();
   enemies.forEach(function(e) { e.drawShadow(); });
-  player.drawShadow();
+  if (gameOver == false) {
+    player.drawShadow();
+  }
+  bullets.forEach(function(e) { e.drawShadow(); });
+  enemyBullets.forEach(function(e) { e.drawShadow(); });
 
 
   bullets.draw();
@@ -165,7 +188,9 @@ function draw() {
   */
   enemyBullets.draw();
   enemies.draw();
-  player.draw();
+  if (gameOver == false) {
+    player.draw();
+  }
   gems.draw();
 }
 
