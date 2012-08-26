@@ -6,6 +6,7 @@ var enemyBullets;
 var enemies;
 var enemySpawner;
 var gems;
+var particleEffects;
 
 var hAxis = 0;
 var vAxis = 0;
@@ -49,17 +50,8 @@ function hexColor() {
     var s = (Math.round(arguments[i] * 255)).toString(16);
     if (s.length == 1) result += "0";
     result += s;
-    console.log(arguments[i] + " -> " + s);
   }
-  console.log("final string = " + s);
   return result;
-
-  /*
-  return "#" +
-    (Math.round(r * 255)).toString(16) +
-    (Math.round(g * 255)).toString(16) +
-    (Math.round(b * 255)).toString(16);
-    */
 }
 
 function setup() {
@@ -74,6 +66,7 @@ function setup() {
   player.bullets = bullets;
   level = new Level(200, 800);
   enemySpawner = new EnemySpawner();
+  particleEffects = new jaws.SpriteList();
 };
 
 function update() {
@@ -104,6 +97,7 @@ function update() {
   enemyBullets.forEach(function(b) { b.update() });
   enemies.forEach(function(b) { b.update() });
   gems.forEach(function(b) { b.update() });
+  particleEffects.forEach(function(b) { b.update() });
 
   checkCollisions();
   cullDeadObjects();
@@ -156,6 +150,10 @@ function cullDeadObjects() {
     return b.shouldDestroy || b.y < -32;
   });
 
+  particleEffects.deleteIf(function(p) {
+    return p.shouldDestroy;
+  });
+
   enemyBullets.deleteIf(function(b) {
     return b.shouldDestroy || b.y > jaws.height + 32;
   });
@@ -192,8 +190,9 @@ function draw() {
     player.draw();
   }
   gems.draw();
+  particleEffects.draw();
 }
 
-jaws.assets.add('assets/img/plane.png');
+jaws.assets.add('assets/img/plane-2.png');
 jaws.assets.add('assets/img/plane-1.png');
 jaws.start(null, {fps: FPS});

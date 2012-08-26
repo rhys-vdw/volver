@@ -7,7 +7,6 @@ function createEntity(image, x, y) {
 function createShadow(sprite) {
   var shadow = sprite.asCanvas();
   var ctx = shadow.getContext('2d');
-  console.dir(shadow);
   var pixels = ctx.getImageData(0, 0, 32, 32);
   var d = pixels.data;
   for (var i = 0; i < d.length; i += 4) {
@@ -119,10 +118,15 @@ function createEnemyShip(image, x, y, health, speed, colliderSize) {
 
   ship.destroy = function() {
     this.getGun().createGem();
+    particleEffects.push(new ParticleEffect({x: this.x, y: this.y, count: 20,
+      lifespan: Range(1,3), color: '#770f0f', spin: Range(0.5, 4),
+      size: Range(2, 4), speed: Range(10, 20)}));
   }
 
+  /*
   ship.shadow.rotateTo(180);
   ship.rotateTo(180);
+  */
 
   return ship;
 }

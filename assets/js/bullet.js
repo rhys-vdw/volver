@@ -39,13 +39,9 @@ function Bullet(x, y, width, height, angle, speed, acceleration, color) {
     context.beginPath();
     context.arc(0, 0, 1, 0, Math.PI*2, true); 
 
-    try {
     var gradient = context.createRadialGradient(0, 0, 0, 0, 0, 1);
     gradient.addColorStop(0, "#FFFFFF");
     gradient.addColorStop(1, color);
-    } catch (e) {
-      //console.log("COLOR FAILED " + color);
-    }
 
     context.fillStyle = gradient;
     context.fill();

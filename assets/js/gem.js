@@ -43,6 +43,9 @@ function Gem(x, y, color, attributes, lifespan) {
     context.fillStyle = color;
     context.setAlpha(normalizedTimeleft());
     context.fillRect(-size/2, -size/2, size, size);
+    context.style = "#FFFFFF";
+    context.setAlpha(normalizedTimeleft() / 2);
+    context.strokeRect(-size/2, -size/2, size, size);
     context.restore();
   }
 }
