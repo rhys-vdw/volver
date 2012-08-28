@@ -37,7 +37,12 @@ function createShip(image, x, y, health, colliderSize) {
 
   ship.health = health;
 
-  ship.destroy = function() { /* override me */ } 
+  ship.destroy = function() {
+    this.getGun().createGem();
+    particleEffects.push(new ParticleEffect({x: this.x, y: this.y, count: 40,
+      lifespan: Range(2,7), color: '#6c8828', spin: Range(10, 40),
+      size: Range(2, 10), speed: Range(40, 60)}));
+  }
 
   ship.getGun = function () {
     return guns[gunIndex];
@@ -119,8 +124,8 @@ function createEnemyShip(image, x, y, health, speed, colliderSize) {
   ship.destroy = function() {
     this.getGun().createGem();
     particleEffects.push(new ParticleEffect({x: this.x, y: this.y, count: 20,
-      lifespan: Range(1,3), color: '#770f0f', spin: Range(0.5, 4),
-      size: Range(2, 4), speed: Range(10, 20)}));
+      lifespan: Range(1,3), color: '#770f0f', spin: Range(10, 40),
+      size: Range(2, 6), speed: Range(40, 60)}));
   }
 
   /*

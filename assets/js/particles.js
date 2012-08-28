@@ -27,6 +27,7 @@ function ParticleEffect(params) {
       if (timeleft <= 0) {
         this.shouldDestroy = true;
       }
+      velocity = velocity.mulS(0.95);
       this.x += velocity.x * DeltaTime;
       this.y += velocity.y * DeltaTime;
 

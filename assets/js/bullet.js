@@ -47,4 +47,10 @@ function Bullet(x, y, width, height, angle, speed, acceleration, color) {
     context.fill();
     context.restore();
   };
+
+  this.destroy = function() {
+    particleEffects.push(new ParticleEffect({x: this.x, y: this.y, count: 8,
+      lifespan: Range(1,3), color: color, spin: Range(0.5, 4),
+      size: Range(1.6, 3), speed: Range(30, 40)}));
+  }
 }

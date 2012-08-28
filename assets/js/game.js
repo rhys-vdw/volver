@@ -7,6 +7,7 @@ var enemies;
 var enemySpawner;
 var gems;
 var particleEffects;
+var title;
 
 var hAxis = 0;
 var vAxis = 0;
@@ -20,6 +21,7 @@ var FPS = 30;
 var DeltaTime = 1 / FPS;
 
 var gameOver = false;
+var gameStarted = false;
 
 jaws.preventDefaultKeys(['left', 'right', 'space', 'up', 'down']);
 
@@ -61,17 +63,28 @@ function setup() {
   enemyBullets = new jaws.SpriteList();
   enemies = new jaws.SpriteList();
   gems = new jaws.SpriteList();
+  level = new Level(200, 800);
+  particleEffects = new jaws.SpriteList();
   player = createShip('assets/img/plane-1.png', 320, 240, 100, 0.7);
   player.addGun(new Gun(player));
   player.bullets = bullets;
-  level = new Level(200, 800);
   enemySpawner = new EnemySpawner();
-  particleEffects = new jaws.SpriteList();
+
+  title = new jaws.Sprite({image: 'assets/img/title.png', x: 0, y: 0, context:context});
 };
+
+function startGame() {
+}
 
 function update() {
 
-  if (gameOver == false) {
+  if (gameStarted == false && jaws.pressed("z")) {
+    console.log("START GAME!");
+    startGame();
+    gameStarted = true;
+  }
+
+  if (gameStarted == true && gameOver == false) {
     var x = 0, y = 0;
     if (jaws.pressed("left"))  x--;
     if (jaws.pressed("right")) x++;
@@ -89,20 +102,23 @@ function update() {
 
     player.setFiring(jaws.pressed("z"));
     player.update();
+    enemySpawner.update();
   }
 
   level.update();
-  enemySpawner.update();
-  bullets.forEach(function(b) { b.update() });
-  enemyBullets.forEach(function(b) { b.update() });
-  enemies.forEach(function(b) { b.update() });
-  gems.forEach(function(b) { b.update() });
-  particleEffects.forEach(function(b) { b.update() });
 
-  checkCollisions();
-  cullDeadObjects();
+  if (gameStarted) {
+    bullets.forEach(function(b) { b.update() });
+    enemyBullets.forEach(function(b) { b.update() });
+    enemies.forEach(function(b) { b.update() });
+    gems.forEach(function(b) { b.update() });
+    particleEffects.forEach(function(b) { b.update() });
 
-  if (player.health < 0) {
+    checkCollisions();
+    cullDeadObjects();
+  }
+
+  if (gameOver == false && player.health < 0) {
     player.destroy();
     gameOver = true;
   }
@@ -115,6 +131,7 @@ function checkCollisions() {
       if (b.getRect().collideRect(e.getRect())) {
         b.shouldDestroy = true;
         e.health -= b.damage;
+        b.destroy();
       }
     });
   });
@@ -125,6 +142,7 @@ function checkCollisions() {
     if (b.getRect().collideRect(playerRect)) {
       b.shouldDestroy = true;
       player.health -= b.damage;
+      b.destroy();
     }
   });
 
@@ -171,7 +189,9 @@ function draw() {
   jaws.clear();
   level.draw();
   enemies.forEach(function(e) { e.drawShadow(); });
-  if (gameOver == false) {
+  if (gameStarted == false) {
+    title.draw();
+  } else if (gameOver == false) {
     player.drawShadow();
   }
   bullets.forEach(function(e) { e.drawShadow(); });
@@ -186,7 +206,7 @@ function draw() {
   */
   enemyBullets.draw();
   enemies.draw();
-  if (gameOver == false) {
+  if (gameStarted == true && gameOver == false) {
     player.draw();
   }
   gems.draw();
@@ -195,4 +215,5 @@ function draw() {
 
 jaws.assets.add('assets/img/plane-2.png');
 jaws.assets.add('assets/img/plane-1.png');
+jaws.assets.add('assets/img/title.png');
 jaws.start(null, {fps: FPS});
