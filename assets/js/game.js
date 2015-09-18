@@ -2,7 +2,7 @@ var canvas;
 var context;
 var player;
 var bullets;
-var enemyBullets;
+var enemyEvulvas;
 var enemies;
 var enemySpawner;
 var gems;
@@ -60,7 +60,7 @@ function setup() {
   canvas = document.getElementById('game');
   context = canvas.getContext('2d');
   bullets = new jaws.SpriteList();
-  enemyBullets = new jaws.SpriteList();
+  enemyEvulvas = new jaws.SpriteList();
   enemies = new jaws.SpriteList();
   gems = new jaws.SpriteList();
   level = new Level(200, 800);
@@ -78,7 +78,7 @@ function startGame() {
 
 function update() {
 
-  if (gameStarted == false && jaws.pressed("z")) {
+  if (gameStarted == false && jaws.pressed("v")) {
     console.log("START GAME!");
     startGame();
     gameStarted = true;
@@ -100,7 +100,7 @@ function update() {
     var scale = DeltaTime * 200;
     player.move(hAxis * scale, vAxis * scale);
 
-    player.setFiring(jaws.pressed("z"));
+    player.setFiring(jaws.pressed("v"));
     player.update();
     enemySpawner.update();
   }
@@ -109,7 +109,7 @@ function update() {
 
   if (gameStarted) {
     bullets.forEach(function(b) { b.update() });
-    enemyBullets.forEach(function(b) { b.update() });
+    enemyEvulvas.forEach(function(b) { b.update() });
     enemies.forEach(function(b) { b.update() });
     gems.forEach(function(b) { b.update() });
     particleEffects.forEach(function(b) { b.update() });
@@ -137,7 +137,7 @@ function checkCollisions() {
   });
 
   var playerRect = player.getRect();
-  enemyBullets.forEach(function(b) {
+  enemyEvulvas.forEach(function(b) {
       // check for collision between bullet and player
     if (b.getRect().collideRect(playerRect)) {
       b.shouldDestroy = true;
@@ -172,7 +172,7 @@ function cullDeadObjects() {
     return p.shouldDestroy;
   });
 
-  enemyBullets.deleteIf(function(b) {
+  enemyEvulvas.deleteIf(function(b) {
     return b.shouldDestroy || b.y > jaws.height + 32;
   });
 
@@ -195,7 +195,7 @@ function draw() {
     player.drawShadow();
   }
   bullets.forEach(function(e) { e.drawShadow(); });
-  enemyBullets.forEach(function(e) { e.drawShadow(); });
+  enemyEvulvas.forEach(function(e) { e.drawShadow(); });
 
 
   bullets.draw();
@@ -204,7 +204,7 @@ function draw() {
     b.getRect().draw();
   });
   */
-  enemyBullets.draw();
+  enemyEvulvas.draw();
   enemies.draw();
   if (gameStarted == true && gameOver == false) {
     player.draw();

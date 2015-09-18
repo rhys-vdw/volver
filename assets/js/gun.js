@@ -35,7 +35,7 @@ function Gun(ship, direction) {
       acceleration = -acceleration;
     }
 
-    ship.bullets.push(new Bullet(
+    ship.bullets.push(new Evulva(
           ship.x, ship.y,
           attributes['width'], attributes['height'],
           angle,
