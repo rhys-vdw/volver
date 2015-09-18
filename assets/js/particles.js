@@ -39,7 +39,7 @@ function ParticleEffect(params) {
       context.translate(this.x, this.y);
       context.rotate(rotation);
       context.fillStyle = params.color;
-      context.setAlpha(normalizedTimeleft());
+      context.globalAlpha = normalizedTimeleft();
       context.fillRect(-size/2, -size/2, size, size);
       context.restore();
     }
