@@ -1,6 +1,6 @@
 "use strict";
 
-function Bullet(x, y, width, height, angle, speed, acceleration, color) {
+function Evulva(x, y, width, height, angle, speed, acceleration, color) {
   this.x = x;
   this.y = y;
   var velocity = new Vec2FromAngle(angle).mulS(speed);

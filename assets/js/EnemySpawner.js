@@ -9,7 +9,7 @@ function EnemySpawner() {
     delay -= DeltaTime;
     if (delay < 0) {
       var enemy = createEnemyShip('assets/img/plane-2.png', xRange(), -32, 10, speedRange(), 0.8);
-      enemy.bullets = enemyBullets;
+      enemy.bullets = enemyEvulvas;
       enemy.addGun(new Gun(enemy, "down"));
       enemies.push(enemy);
       delay += delayRange();
