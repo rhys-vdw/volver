@@ -11,7 +11,7 @@ function Gun(ship, direction) {
   }
 
   this.createGem = function() {
-    gems.push(new Gem(ship.x, ship.y, color, attributes, 4));
+    gems.push(new Gem(ship.x, ship.y, color, attributes, 16));
   }
 
   this.update = function() {
