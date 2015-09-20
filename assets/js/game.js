@@ -11,8 +11,8 @@ var title;
 
 var hAxis = 0;
 var vAxis = 0;
-var keyDrop = 2.0;
-var keyRise = 5.0;
+var keyDrop = 10.0;
+var keyRise = 15.0;
 
 var flyHeight = 24;
 var ShadowColor = "#887e63";
